@@ -14,7 +14,7 @@ public class Program {
 
 	public static void main(String[] args) throws SQLException {
 
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+	
 		Connection conn = null;
 		PreparedStatement st = null;
 
@@ -22,17 +22,14 @@ public class Program {
 			conn = DB.getConnection();
 
 			st = conn.prepareStatement(
-					"INSERT INTO seller "
-			+ "(Name, Email, BirthDate, BaseSalary, DepartmentId) "
-			+ "VALUES " 
-			+ "(?, ?, ?, ?, ?)");
+					"UPDATE seller "
+			+ "SET BaseSalary = BaseSalary + ? "
+			+ "WHERE " 
+			+ "(DepartmentId = ?)");
 
-			st.setString(1, "Sam Winchester");
-			st.setString(2, "sam.caca@fantasmas.com");
-			st.setDate(3, new java.sql.Date(sdf.parse("12/12/1980").getTime()));
-			st.setDouble(4, 4500.0);
-			st.setInt(5, 1);
-
+			st.setDouble(1, 700);
+			st.setInt(2, 1);
+			
 			int rowsAffected = st.executeUpdate();
 
 			System.out.println("Done! Rows affected: " + rowsAffected);
@@ -40,8 +37,6 @@ public class Program {
 		} catch (SQLException e) {
 			e.printStackTrace();
 
-		} catch (ParseException e) {
-			e.printStackTrace();
 		} finally {
 
 			DB.closeConnection();
